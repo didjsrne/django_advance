@@ -13,8 +13,15 @@ class ArticleView(APIView):
     
     def post(self, request):
         serializer = ArticleCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # 방법 1 
+        # if serializer.is_valid():
+        #     serializer.save(author=request.user)
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # else:
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # 방법 2
+        serializer.is_valid(raise_exception=True)
+        serializer.save(author=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
